@@ -1,0 +1,15 @@
+#ifndef _LCD20X4_INCLUDED_
+#define _LCD20X4_INCLUDED_
+
+#include "../main.h"
+
+
+#include "./lib/port.h"
+
+void LcdInit();
+
+void PrintFlash(flash char *str, unsigned char row , unsigned char col);
+
+void Print( char *str, unsigned char row , unsigned char col);
+
+#endif

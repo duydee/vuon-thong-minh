@@ -1,0 +1,51 @@
+--------------------------------------------------------GIỚI THIỆU VỀ PROJECT--------------------------------------------------------------------
+
+-Vi xử lí dùng atmega128 hoạt động ở tần số 20MHz 
+-Thiết kế theo kiểu mở rộng bộ nhớ SRAM dùng để mở rộng thêm các chân ngoại vi (atmega128 có hỗ trợ SRAM lớn) 
+ dùng với các IC như : 74hc573 (IC chốt dùng để chốt data) + 74154 (IC giải mã dùng để giải mã các các vùng địa chỉ bộ nhớ SRAM ) 
+ ngoài ra dùng thêm các IC digital như : NOT ,AND,NOR.
+
+-Linh kiện gồm có trong mạch : 
+	+vđk : atmega128.
+	+IC : 74hc573 ,74154 ,NOT ,AND,NOR.
+	+Sensor : cảm biến nhiệt độ lm35 , cảm biến độ ẩm nhiệt độ DHT11 , cảm biến mưa , cảm biến độ ẩm đất .
+	+LCD : lcd20x4.
+	+Module DS1307.
+	+Các tải để điều khiển: 3 Đèn ,3 Quạt ,3 Bơm, 8 relay.
+	+Gồm thêm một số nhiều : led , relay , res , diode , NPN , photoTransistor , Button .
+	+Gồm thêm thạch anh 20MHz , và thêm vài con tụ.
+       *Lưu ý : tuỳ mục đích sử dụng có thể mua thêm.
+
+-Các chức năng trên mạch:
+	+Điều khiển ON/OFF được tất cả các tải được cho phép điều khiển.
+	+Hẹn giờ ON/OFF tất cả các tải quan trọng như  đèn, quạt, bơm  (mỗi thiết bị có thể được hẹn giờ 3 lần ) .
+	+Menu đa dạng dễ dùng.
+	+Có Mode Auto : Đèn sáng khi trời tối hoặc mưa , Quạt bật khi nhiệt độ cao , Bơm bật khi Độ ẩm đất thấp , ... ( Mức ưa tiên cao nhất ).
+	+Đồng bộ được data từ trên server về (phải có esp8266 + có mạng).
+      *Lưu ý: +Mạch Có thể hoạt động hoàn toàn độc lập full chức năng không cần dùng esp8266.
+	      +Tất cả các tải đều sử dụng nguồn ngoài , vđk chỉ kích dẫn.	
+
+-Các chức năng trên app Android Hỗ trợ từ android 5.0 trở lên ( viết bằng android studio):
+	+Điều khiển ON/OFF được tất cả các tải được cho phép điều khiển.
+	+Hẹn giờ ON/OFF tất cả các tải quan trọng như  đèn, quạt, bơm  (mỗi thiết bị có thể được hẹn giờ 3 lần ). 
+	+Có Mode Auto.
+	+Đồng bộ được data từ trên server về.
+	+Hiển thị đầy đủ các thông số của sensor gửi lên.
+       *Lưu ý : Phải có kết nối mạng thì mới đồng bộ được data.
+
+-Về phần hình thức truyền gửi data:
+	+Sử dụng giao thức sockIo (server và client).
+	+server viết trên nền nodejs.
+	+DB sử dụng mysql.
+	+VĐK với esp8266 gửi nhận data qua USART.
+
+-Tính năng mở rộng thêm :
+	+Có thể lắp thêm rất rất nhiều nhiều ngoại vi ( max > 256 ngoại vi).
+	+Tuỳ biến thêm nhiều thứ.
+
+-Về phần code:
+	-Đầy đủ code cho : vđk, esp8266, server, android stdio, file mô phỏng protues , và các phần mền cần thiết. 
+	-Code tương đối gọn gàng , dễ hiểu.
+
+
+	

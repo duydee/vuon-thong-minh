@@ -1,0 +1,4 @@
+S011  //status TB
+N010102  //hen gio ON
+F012600  //hen gio OFF
+D01  // delete hen gio

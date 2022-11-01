@@ -1,0 +1,987 @@
+#ifndef _MENU_INCLUDED_
+#define _MENU_INCLUDED_
+
+#pragma used+
+
+#include "../main.h"
+#include "port.h"
+#include "userdef.h"
+
+//id thiet bi
+#define Device_Temp      0
+#define Device_Humi      1
+#define Device_DoAmDat   2
+#define Device_Mua       3
+ 
+#define Device_Den_Khu1  4
+#define Device_Den_Khu2  5
+#define Device_Den_Khu3  6
+
+#define Device_Quat_Khu1 7
+#define Device_Quat_Khu2 8
+#define Device_Quat_Khu3 9
+
+#define Device_Bom_Khu1  10
+#define Device_Bom_Khu2  11
+#define Device_Bom_Khu3  12
+
+#define Device_Relay1    13
+#define Device_Relay2    14
+#define Device_Relay3    15
+#define Device_Relay4    16
+#define Device_Relay5    17
+#define Device_Relay6    18
+#define Device_Relay7    19
+#define Device_Relay8    20
+
+//auto
+#define Auto_Den   21
+#define Auto_Quat  22
+#define Auto_Bom   23
+
+//hen gio den
+#define Hengio_DenKhu1Lan1   0
+#define Hengio_DenKhu1Lan2   1
+#define Hengio_DenKhu1Lan3   2
+
+#define Hengio_DenKhu2Lan1   3
+#define Hengio_DenKhu2Lan2   4
+#define Hengio_DenKhu2Lan3   5
+
+#define Hengio_DenKhu3Lan1   6
+#define Hengio_DenKhu3Lan2   7
+#define Hengio_DenKhu3Lan3   8
+
+//hen gio quat
+#define Hengio_QuatKhu1Lan1   9
+#define Hengio_QuatKhu1Lan2   10
+#define Hengio_QuatKhu1Lan3   11
+
+#define Hengio_QuatKhu2Lan1   12
+#define Hengio_QuatKhu2Lan2   13
+#define Hengio_QuatKhu2Lan3   14
+
+#define Hengio_QuatKhu3Lan1   15
+#define Hengio_QuatKhu3Lan2   16
+#define Hengio_QuatKhu3Lan3   17
+
+//hen gio bom
+#define Hengio_BomKhu1Lan1   18
+#define Hengio_BomKhu1Lan2   19
+#define Hengio_BomKhu1Lan3   20
+
+#define Hengio_BomKhu2Lan1   21
+#define Hengio_BomKhu2Lan2   22
+#define Hengio_BomKhu2Lan3   23
+
+#define Hengio_BomKhu3Lan1   24
+#define Hengio_BomKhu3Lan2   25
+#define Hengio_BomKhu3Lan3   26
+
+//flag Auto
+extern unsigned char flagAutoDen ,flagAutoQuat ,flagAutoBom;
+
+void ActuatorsDelete(){}
+
+void ActuatorsActivation(char Device, char Status)
+{
+    printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, Device, Status );
+    switch(Device) 
+    {    
+       // sensor 
+        case Device_Humi:
+            Sensors.thietbi.TB0 = Status; 
+            break;
+        case Device_Temp:
+            Sensors.thietbi.TB1 = Status;  
+            break; 
+        case Device_DoAmDat:
+            break; 
+        case Device_Mua:
+            break; 
+       // den    
+        case Device_Den_Khu1:
+            Dens.thietbi.TB0 = Status;
+            break; 
+        case Device_Den_Khu2:
+            Dens.thietbi.TB1 = Status; 
+            break; 
+        case Device_Den_Khu3:
+            Dens.thietbi.TB2 = Status; 
+            break;
+       // quat      
+        case Device_Quat_Khu1:
+            Quats.thietbi.TB0 = Status;
+            break; 
+        case Device_Quat_Khu2:
+            Quats.thietbi.TB1 = Status;
+            break;
+        case Device_Quat_Khu3:
+            Quats.thietbi.TB2 = Status;
+            break;
+        // bom    
+        case Device_Bom_Khu1:
+            Boms.thietbi.TB0 = Status;
+            break;
+        case Device_Bom_Khu2:
+            Boms.thietbi.TB1 = Status;
+            break;
+        case Device_Bom_Khu3:
+            Boms.thietbi.TB2 = Status;
+            break; 
+        // relay
+        case Device_Relay1:
+            Relays.thietbi.TB0 = Status;
+            break; 
+        case Device_Relay2:
+            Relays.thietbi.TB1 = Status;
+            break; 
+        case Device_Relay3:
+            Relays.thietbi.TB2 = Status;
+            break; 
+        case Device_Relay4:
+            Relays.thietbi.TB3 = Status;
+            break; 
+        case Device_Relay5:
+            Relays.thietbi.TB4 = Status;
+            break; 
+        case Device_Relay6:
+            Relays.thietbi.TB5 = Status;
+            break; 
+        case Device_Relay7:  
+            Relays.thietbi.TB6 = Status;
+            break; 
+        case Device_Relay8: 
+            Relays.thietbi.TB7 = Status;
+            break;     
+    }
+    Relay_Activation;
+    Den_Activation;  
+    Quat_Activation;
+    Bom_Activation;
+    Sensor_Activation;
+}
+
+void ActuatorsDongBoThietBi(char Device, char Status)
+{
+    printf( "{\"type\":%d}\r\n" , getalldataStatusTB); 
+    denDongBo = 0;  
+}
+
+void ActuatorsDongBoHenGio(char Device, char Status)
+{
+    printf( "{\"type\":%d}\r\n" , getalldataHengioTB);
+    denDongBo = 0; 
+} 
+
+void AutoON(char Device, char Status)
+{
+    if(Device == Auto_Den)
+    {
+        flagAutoDen = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 4, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 5, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 6, 1 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoDen,ON);    
+    }
+    else if(Device == Auto_Quat)
+    {
+        flagAutoQuat = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 7, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 8, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 9, 1 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoQuat,ON); 
+    }
+    else if(Device == Auto_Bom)
+    {
+        flagAutoBom = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 10, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 11, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 12, 1 ); 
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoBom,ON); 
+    }
+}
+
+void AutoOFF(char Device, char Status)
+{
+    if(Device == Auto_Den)
+    {
+        flagAutoDen = 0; 
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 4, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 5, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 6, 0 ); 
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoDen,OFF);  
+    }
+    else if(Device == Auto_Quat)
+    {
+        flagAutoQuat = 0;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 7, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 8, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 9, 0 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoQuat,OFF); 
+    }
+    else if(Device == Auto_Bom)
+    {
+        flagAutoBom = 0;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 10, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 11, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 12, 0 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoBom,OFF);  
+    }
+}
+
+flash struct Menu {
+      char menuID;
+    
+      flash struct Menu *pre;
+      char Title[20];
+      
+      char List1[20]; flash struct Menu *Menulist1; void (*ActivationON)(char,char);
+      
+      char List2[20]; flash struct Menu *Menulist2; void (*ActivationOFF)(char,char);
+      
+      char List3[20]; flash struct Menu *Menulist3; void (*ActivationSet)();
+} a;
+
+flash struct Menu MainMenu , SensorMenu , ActuatorMenu ,SettingMenu, 
+TempMenu, HumiMenu,MoreSensorMenu,DoAmDatMenu,CamBienMuaMenu,
+ThietbiMenu,DenMenu, DenKhu1Menu, DenKhu2Menu, DenKhu3Menu,
+QuatMenu, QuatKhu1Menu, QuatKhu2Menu, QuatKhu3Menu,
+BomMenu, BomKhu1Menu, BomKhu2Menu, BomKhu3Menu,
+RelayMenu, RelayNhom1Menu, Relay1Menu, Relay2Menu, Relay3Menu,
+RelayNhom2Menu,Relay4Menu, Relay5Menu, Relay5Menu, Relay6Menu,
+RelayNhom3Menu, Relay7Menu, Relay8Menu,
+SettingHengio, HengioDen, HengioQuat, HengioBom, 
+HengioDenKhu1, HengioDenKhu1Lan1, HengioDenKhu1Lan2, HengioDenKhu1Lan3,
+HengioDenKhu2, HengioDenKhu2Lan1, HengioDenKhu2Lan2, HengioDenKhu2Lan3,
+HengioDenKhu3, HengioDenKhu3Lan1, HengioDenKhu3Lan2, HengioDenKhu3Lan3,
+HengioQuatKhu1, HengioQuatKhu1Lan1, HengioQuatKhu1Lan2, HengioQuatKhu1Lan3,
+HengioQuatKhu2, HengioQuatKhu2Lan1, HengioQuatKhu2Lan2, HengioQuatKhu2Lan3,
+HengioQuatKhu3, HengioQuatKhu3Lan1, HengioQuatKhu3Lan2, HengioQuatKhu3Lan3,
+HengioBomKhu1, HengioBomKhu1Lan1, HengioBomKhu1Lan2, HengioBomKhu1Lan3,
+HengioBomKhu2, HengioBomKhu2Lan1, HengioBomKhu2Lan2, HengioBomKhu2Lan3,
+HengioBomKhu3, HengioBomKhu3Lan1, HengioBomKhu3Lan2, HengioBomKhu3Lan3,
+Auto,AutoDen,AutoQuat,AutoBom,
+DongBo,HuongDanDongBo;
+
+flash struct Menu MainMenu = {
+    NULL,
+    NULL,
+    "     MAIN MENU     ",
+    "  Sensors          ",&SensorMenu,NULL,
+    "  Actuator         ",&ActuatorMenu,NULL,
+    "  Setting          ",&SettingMenu,NULL,
+};
+
+flash struct Menu SensorMenu = {
+    NULL,
+    &MainMenu,
+    "    SENSOR MENU    ",
+    "  Temp             ",&TempMenu,NULL,
+    "  Humi             ",&HumiMenu,NULL,
+    "  More             ",&MoreSensorMenu,NULL,
+};
+flash struct Menu MoreSensorMenu = {
+    NULL,
+    &SensorMenu,
+    "    SENSOR MENU    ",
+    "  Do am dat        ",&DoAmDatMenu,NULL,
+    "  Cam Bien Mua     ",&CamBienMuaMenu,NULL,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu TempMenu = {
+    Device_Temp,
+    &SensorMenu,
+    "    TEMP           ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};                 
+flash struct Menu HumiMenu = {             
+    Device_Humi,
+    &SensorMenu,
+    "    HUMI           ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};      
+flash struct Menu DoAmDatMenu = {
+    Device_DoAmDat,
+    &MoreSensorMenu,
+    "    Do am dat      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu CamBienMuaMenu = {    
+    Device_Mua,
+    &MoreSensorMenu,
+    "   Cam Bien Mua    ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+///////
+flash struct Menu ActuatorMenu = {      
+    NULL,
+    &MainMenu,
+    "    ACTUATOR MENU  ",
+    "  Thiet bi         ",&ThietbiMenu,NULL,
+    "  Relays           ",&RelayMenu,NULL,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu ThietbiMenu = {      
+    NULL,
+    &ActuatorMenu,
+    "    Thiet bi       ",
+    "  Den              ",&DenMenu,NULL,
+    "  Quat             ",&QuatMenu,NULL,
+    "  Bom              ",&BomMenu,NULL,
+};
+
+//den
+flash struct Menu DenMenu = {
+    NULL,
+    &ThietbiMenu,
+    "    Den            ",
+    "  Khu 1            ",&DenKhu1Menu,NULL,
+    "  Khu 2            ",&DenKhu2Menu,NULL,
+    "  Khu 3            ",&DenKhu3Menu,NULL,
+};
+flash struct Menu DenKhu1Menu = {                      
+    Device_Den_Khu1,
+    &DenMenu,
+    "    Den Khu 1      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu DenKhu2Menu = {
+    Device_Den_Khu2,
+    &DenMenu,
+    "    Den Khu 2      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu DenKhu3Menu = {
+    Device_Den_Khu3,
+    &DenMenu,
+    "    Den Khu 3      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+//quat
+flash struct Menu QuatMenu = {   
+    NULL,
+    &ThietbiMenu,
+    "    Quat           ",
+    "  Khu1             ",&QuatKhu1Menu,NULL,
+    "  Khu2             ",&QuatKhu2Menu,NULL,
+    "  Khu3             ",&QuatKhu3Menu,NULL,
+};
+flash struct Menu QuatKhu1Menu = {           
+    Device_Quat_Khu1,
+    &QuatMenu,
+    "    Quat Khu 1     ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu QuatKhu2Menu = {
+    Device_Quat_Khu2,
+    &QuatMenu,
+    "    Quat Khu 2     ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu QuatKhu3Menu = {
+    Device_Quat_Khu3,
+    &QuatMenu,
+    "    Quat Khu 3     ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+//bom
+flash struct Menu BomMenu = {         
+    NULL,
+    &ThietbiMenu,
+    "    Bom            ",
+    "  Khu 1            ",&BomKhu1Menu,NULL,
+    "  Khu 2            ",&BomKhu2Menu,NULL,
+    "  Khu 3            ",&BomKhu3Menu,NULL,
+};
+flash struct Menu BomKhu1Menu = {
+    Device_Bom_Khu1,
+    &BomMenu,
+    "    Bom Khu 1      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu BomKhu2Menu = {
+    Device_Bom_Khu2,
+    &BomMenu,
+    "    Bom Khu 2      ",
+    "  ON               ",NULL,&ActuatorsActivation,        
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu BomKhu3Menu = {       
+    Device_Bom_Khu3,
+    &BomMenu,
+    "    Bom Khu 3      ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+
+///////////
+
+flash struct Menu RelayMenu = {
+    NULL,
+    &ThietbiMenu,
+    "    Relay          ",
+    "  Nhom 1           ",&RelayNhom1Menu,NULL,
+    "  Nhom 2           ",&RelayNhom2Menu,NULL,
+    "  Nhom 3           ",&RelayNhom3Menu,NULL,
+};
+
+flash struct Menu RelayNhom1Menu = {  
+    NULL,
+    &RelayMenu,
+    "    Nhom 1         ",
+    "  Relay 1          ",&Relay1Menu,NULL,
+    "  Relay 2          ",&Relay2Menu,NULL,
+    "  Relay 3          ",&Relay3Menu,NULL,
+};
+flash struct Menu Relay1Menu = {
+    Device_Relay1,
+    &RelayNhom1Menu,
+    "    Relay 1        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu Relay2Menu = {
+    Device_Relay2,
+    &RelayNhom1Menu,     
+    "    Relay 2        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu Relay3Menu = {
+    Device_Relay3,
+    &RelayNhom1Menu,
+    "    Relay 3        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+flash struct Menu RelayNhom2Menu = {    
+    NULL,
+    &RelayMenu,
+    "    Nhom 2         ",
+    "  Relay 4          ",&Relay4Menu,NULL,
+    "  Relay 5          ",&Relay5Menu,NULL,
+    "  Relay 6          ",&Relay6Menu,NULL,
+};
+flash struct Menu Relay4Menu = {                   
+    Device_Relay4,
+    &RelayNhom2Menu,
+    "    Relay 4        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu Relay5Menu = {
+    Device_Relay5,
+    &RelayNhom2Menu,
+    "    Relay 5        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu Relay6Menu = {
+    Device_Relay6,
+    &RelayNhom2Menu,
+    "    Relay 6        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+flash struct Menu RelayNhom3Menu = {        
+    NULL,
+    &RelayMenu,
+    "    Nhom 3         ",
+    "  Relay 7          ",&Relay7Menu,NULL,
+    "  Relay 8          ",&Relay8Menu,NULL,
+    "  None          ",NULL,NULL,
+};
+flash struct Menu Relay7Menu = {
+    Device_Relay7,
+    &RelayNhom3Menu,
+    "    Relay 7        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+flash struct Menu Relay8Menu = {
+    Device_Relay8,
+    &RelayNhom3Menu,
+    "    Relay 8        ",
+    "  ON               ",NULL,&ActuatorsActivation,
+    "  OFF              ",NULL,&ActuatorsActivation,
+    "  None             ",NULL,NULL,
+};
+
+
+//////
+flash struct Menu SettingMenu = {
+    NULL,
+    &MainMenu,
+    "    SETTINGS       ",
+    "  Hen Gio          ",&SettingHengio,NULL,
+    "  Auto             ",&Auto,NULL,
+    "  Dong Bo          ",&DongBo,NULL,
+};
+
+flash struct Menu SettingHengio = {
+    NULL,
+    &SettingMenu,
+    "    Hen Gio        ",
+    "  Den              ",&HengioDen,NULL,
+    "  Quat             ",&HengioQuat,NULL,
+    "  Bom              ",&HengioBom,NULL,
+};
+
+//hen gio den
+flash struct Menu HengioDen = {
+    NULL,
+    &SettingHengio,
+    "    Hen Gio Den    ",
+    "  Khu 1            ",&HengioDenKhu1,NULL,
+    "  Khu 2            ",&HengioDenKhu2,NULL,
+    "  Khu 3            ",&HengioDenKhu3,NULL,
+};
+
+//hen gio den khu 1
+flash struct Menu HengioDenKhu1 = {
+    NULL,
+    &HengioDen,
+    " Hen Gio Den Khu 1 ",
+    "  Lan 1            ",&HengioDenKhu1Lan1,NULL,
+    "  Lan 2            ",&HengioDenKhu1Lan2,NULL,
+    "  Lan 3            ",&HengioDenKhu1Lan3,NULL,
+};
+
+flash struct Menu HengioDenKhu1Lan1 = {               
+    Hengio_DenKhu1Lan1,
+    &HengioDenKhu1,
+    " Hen Gio Den Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu1Lan2 = {            
+    Hengio_DenKhu1Lan2,
+    &HengioDenKhu1,
+    " Hen Gio Den Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu1Lan3 = {      
+    Hengio_DenKhu1Lan3,
+    &HengioDenKhu1,
+    " Hen Gio Den Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio den khu 2
+flash struct Menu HengioDenKhu2 = {
+    NULL,
+    &HengioDen,
+    " Hen Gio Den Khu 2 ",
+    "  Lan 1            ",&HengioDenKhu2Lan1,NULL,
+    "  Lan 2            ",&HengioDenKhu2Lan2,NULL,
+    "  Lan 3            ",&HengioDenKhu2Lan3,NULL,
+};
+
+flash struct Menu HengioDenKhu2Lan1 = {               
+    Hengio_DenKhu2Lan1,
+    &HengioDenKhu2,
+    " Hen Gio Den Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu2Lan2 = {            
+    Hengio_DenKhu2Lan2,
+    &HengioDenKhu2,
+    " Hen Gio Den Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu2Lan3 = {      
+    Hengio_DenKhu2Lan3,
+    &HengioDenKhu2,
+    " Hen Gio Den Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio den khu 3
+flash struct Menu HengioDenKhu3 = {
+    NULL,
+    &HengioDen,
+    " Hen Gio Den Khu 3 ",
+    "  Lan 1            ",&HengioDenKhu3Lan1,NULL,
+    "  Lan 2            ",&HengioDenKhu3Lan2,NULL,
+    "  Lan 3            ",&HengioDenKhu3Lan3,NULL,
+};
+
+flash struct Menu HengioDenKhu3Lan1 = {               
+    Hengio_DenKhu3Lan1,
+    &HengioDenKhu3,
+    " Hen Gio Den Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu3Lan2 = {            
+    Hengio_DenKhu3Lan2,
+    &HengioDenKhu3,
+    " Hen Gio Den Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioDenKhu3Lan3 = {      
+    Hengio_DenKhu3Lan3,
+    &HengioDenKhu3,
+    " Hen Gio Den Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio quat
+flash struct Menu HengioQuat = {
+    NULL,
+    &SettingHengio,
+    "    Hen Gio Quat   ",
+    "  Khu 1            ",&HengioQuatKhu1,NULL,
+    "  Khu 2            ",&HengioQuatKhu2,NULL,
+    "  Khu 3            ",&HengioQuatKhu3,NULL,
+};
+
+//hen gio quat khu 1
+flash struct Menu HengioQuatKhu1 = {
+    NULL,
+    &HengioQuat,
+    " Hen Gio Quat Khu 1",
+    "  Lan 1            ",&HengioQuatKhu1Lan1,NULL,
+    "  Lan 2            ",&HengioQuatKhu1Lan2,NULL,
+    "  Lan 3            ",&HengioQuatKhu1Lan3,NULL,
+};
+
+flash struct Menu HengioQuatKhu1Lan1 = {               
+    Hengio_QuatKhu1Lan1,
+    &HengioQuatKhu1,
+    " Hen Gio Quat Lan 1",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu1Lan2 = {               
+    Hengio_QuatKhu1Lan2,
+    &HengioQuatKhu1,
+    " Hen Gio Quat Lan 2",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu1Lan3 = {               
+    Hengio_QuatKhu1Lan3,
+    &HengioQuatKhu1,
+    " Hen Gio Quat Lan 3",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio quat khu 2
+flash struct Menu HengioQuatKhu2 = {
+    NULL,
+    &HengioQuat,
+    " Hen Gio Quat Khu 2",
+    "  Lan 1            ",&HengioQuatKhu2Lan1,NULL,
+    "  Lan 2            ",&HengioQuatKhu2Lan2,NULL,
+    "  Lan 3            ",&HengioQuatKhu2Lan3,NULL,
+};
+
+flash struct Menu HengioQuatKhu2Lan1 = {               
+    Hengio_QuatKhu2Lan1,
+    &HengioQuatKhu2,
+    " Hen Gio Quat Lan 1",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu2Lan2 = {               
+    Hengio_QuatKhu2Lan2,
+    &HengioQuatKhu2,
+    " Hen Gio Quat Lan 2",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu2Lan3 = {               
+    Hengio_QuatKhu2Lan3,
+    &HengioQuatKhu2,
+    " Hen Gio Quat Lan 3",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio quat khu 3
+flash struct Menu HengioQuatKhu3 = {
+    NULL,
+    &HengioQuat,
+    " Hen Gio Quat Khu 3",
+    "  Lan 1            ",&HengioQuatKhu3Lan1,NULL,
+    "  Lan 2            ",&HengioQuatKhu3Lan2,NULL,
+    "  Lan 3            ",&HengioQuatKhu3Lan3,NULL,
+};
+
+flash struct Menu HengioQuatKhu3Lan1 = {               
+    Hengio_QuatKhu3Lan1,
+    &HengioQuatKhu3,
+    " Hen Gio Quat Lan 1",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu3Lan2 = {               
+    Hengio_QuatKhu3Lan2,
+    &HengioQuatKhu3,
+    " Hen Gio Quat Lan 2",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioQuatKhu3Lan3 = {               
+    Hengio_QuatKhu3Lan3,
+    &HengioQuatKhu3,
+    " Hen Gio Quat Lan 3",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio bom
+flash struct Menu HengioBom = {
+    NULL,
+    &SettingHengio,
+    "    Hen Gio Bom    ",
+    "  Khu 1            ",&HengioBomKhu1,NULL,
+    "  Khu 2            ",&HengioBomKhu2,NULL,
+    "  Khu 3            ",&HengioBomKhu3,NULL,
+};
+
+//hen gio bom khu 1
+flash struct Menu HengioBomKhu1 = {
+    NULL,
+    &HengioBom,
+    " Hen Gio Bom Khu 1 ",
+    "  Lan 1            ",&HengioBomKhu1Lan1,NULL,
+    "  Lan 2            ",&HengioBomKhu1Lan2,NULL,
+    "  Lan 3            ",&HengioBomKhu1Lan3,NULL,
+};
+
+flash struct Menu HengioBomKhu1Lan1 = {               
+    Hengio_BomKhu1Lan1,
+    &HengioBomKhu1,
+    " Hen Gio Bom Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu1Lan2 = {               
+    Hengio_BomKhu1Lan2,
+    &HengioBomKhu1,
+    " Hen Gio Bom Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu1Lan3 = {               
+    Hengio_BomKhu1Lan3,
+    &HengioBomKhu1,
+    " Hen Gio Bom Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio bom khu 2
+flash struct Menu HengioBomKhu2 = {
+    NULL,
+    &HengioBom,
+    " Hen Gio Bom Khu 2 ",
+    "  Lan 1            ",&HengioBomKhu2Lan1,NULL,
+    "  Lan 2            ",&HengioBomKhu2Lan2,NULL,
+    "  Lan 3            ",&HengioBomKhu2Lan3,NULL,
+};
+
+flash struct Menu HengioBomKhu2Lan1 = {               
+    Hengio_BomKhu2Lan1,
+    &HengioBomKhu2,
+    " Hen Gio Bom Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu2Lan2 = {               
+    Hengio_BomKhu2Lan2,
+    &HengioBomKhu2,
+    " Hen Gio Bom Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu2Lan3 = {               
+    Hengio_BomKhu2Lan3,
+    &HengioBomKhu2,
+    " Hen Gio Bom Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+//hen gio bom khu 3
+flash struct Menu HengioBomKhu3 = {
+    NULL,
+    &HengioBom,
+    " Hen Gio Bom Khu 3 ",
+    "  Lan 1            ",&HengioBomKhu3Lan1,NULL,
+    "  Lan 2            ",&HengioBomKhu3Lan2,NULL,
+    "  Lan 3            ",&HengioBomKhu3Lan3,NULL,
+};
+
+flash struct Menu HengioBomKhu3Lan1 = {               
+    Hengio_BomKhu3Lan1,
+    &HengioBomKhu3,
+    " Hen Gio Bom Lan 1 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu3Lan2 = {               
+    Hengio_BomKhu3Lan2,
+    &HengioBomKhu3,
+    " Hen Gio Bom Lan 2 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu HengioBomKhu3Lan3 = {               
+    Hengio_BomKhu3Lan3,
+    &HengioBomKhu3,
+    " Hen Gio Bom Lan 3 ",
+    "  Gio              ",NULL,NULL,
+    "  Phut             ",NULL,NULL,
+    "      Delete       ",NULL,&ActuatorsDelete,
+};
+
+flash struct Menu Auto = {                       
+    NULL,
+    &SettingMenu,
+    "    Auto           ",
+    "  Auto Den         ",&AutoDen,NULL,
+    "  Auto Quat        ",&AutoQuat,NULL,
+    "  Auto Bom         ",&AutoBom,NULL,
+};
+
+flash struct Menu AutoDen = {                       
+    Auto_Den,
+    &Auto,
+    "    Auto Den       ",
+    "  ON               ",NULL,&AutoON,
+    "  OFF              ",NULL,&AutoOFF,
+    "  Trang Thai       ",NULL,NULL,
+};
+
+flash struct Menu AutoQuat = {                       
+    Auto_Quat,
+    &Auto,
+    "    Auto Quat      ",
+    "  ON               ",NULL,&AutoON,
+    "  OFF              ",NULL,&AutoOFF,
+    "  Trang Thai       ",NULL,NULL,
+};
+
+flash struct Menu AutoBom = {                       
+    Auto_Bom,
+    &Auto,
+    "    Auto Bom       ",
+    "  ON               ",NULL,&AutoON,
+    "  OFF              ",NULL,&AutoOFF,
+    "  Trang Thai       ",NULL,NULL,
+};
+
+flash struct Menu DongBo = {                       
+    NULL,
+    &SettingMenu,
+    "    Dong Bo        ",
+    "  Dong Bo Thiet Bi ",NULL,&ActuatorsDongBoThietBi,
+    "  Dong Bo Hen Gio  ",NULL,&ActuatorsDongBoHenGio,
+    "  Huong Dan Dong Bo",&HuongDanDongBo,NULL,
+};
+
+flash struct Menu HuongDanDongBo = {                       
+    NULL,
+    &DongBo,
+    "  Huong Dan Dong Bo",
+    "  Moi dong bo mat  ",NULL,NULL,
+    "  khoang 2P de done",NULL,NULL,
+    "                   ",&DongBo,NULL,
+};
+
+#pragma used-
+
+#endif

@@ -1,0 +1,6 @@
+VERSION:3 SOURCE_TIMESTAMP:542B53A4
+NODE:I LEVEL:0 LINE:1 "D:\DuAnLon\VuonThongMinh\atmega128\lib\dht11.h"
+NODE:M LEVEL:0 LINE:4 "DHT11_PIN"
+NODE:F LEVEL:0 LINE:6 "Request(void)"
+NODE:F LEVEL:0 LINE:14 "Response(void)"
+NODE:F LEVEL:0 LINE:22 "Receive_data(void)"

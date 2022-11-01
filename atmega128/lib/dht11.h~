@@ -1,0 +1,13 @@
+#ifndef _DHT11_INCLUDED_
+#define _DHT11_INCLUDED_
+
+//#include "../main.h"
+#include <mega128.h>
+#include <delay.h>
+
+void Request();
+void Response();
+char Receive_data();
+           
+
+#endif

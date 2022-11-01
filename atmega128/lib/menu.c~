@@ -1,0 +1,153 @@
+#include "menu.h"
+
+
+//flag Auto
+extern unsigned char flagAutoDen ,flagAutoQuat ,flagAutoBom;
+
+void ActuatorsDelete(){
+}
+
+void ActuatorsActivation(char Device, char Status)
+{
+    printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, Device, Status );
+    switch(Device) 
+    {    
+       // sensor 
+        case Device_Humi:
+            Sensors.thietbi.TB0 = Status; 
+            break;
+        case Device_Temp:
+            Sensors.thietbi.TB1 = Status;  
+            break; 
+        case Device_DoAmDat:
+            break; 
+        case Device_Mua:
+            break; 
+       // den    
+        case Device_Den_Khu1:
+            Dens.thietbi.TB0 = Status;
+            break; 
+        case Device_Den_Khu2:
+            Dens.thietbi.TB1 = Status; 
+            break; 
+        case Device_Den_Khu3:
+            Dens.thietbi.TB2 = Status; 
+            break;
+       // quat      
+        case Device_Quat_Khu1:
+            Quats.thietbi.TB0 = Status;
+            break; 
+        case Device_Quat_Khu2:
+            Quats.thietbi.TB1 = Status;
+            break;
+        case Device_Quat_Khu3:
+            Quats.thietbi.TB2 = Status;
+            break;
+        // bom    
+        case Device_Bom_Khu1:
+            Boms.thietbi.TB0 = Status;
+            break;
+        case Device_Bom_Khu2:
+            Boms.thietbi.TB1 = Status;
+            break;
+        case Device_Bom_Khu3:
+            Boms.thietbi.TB2 = Status;
+            break; 
+        // relay
+        case Device_Relay1:
+            Relays.thietbi.TB0 = Status;
+            break; 
+        case Device_Relay2:
+            Relays.thietbi.TB1 = Status;
+            break; 
+        case Device_Relay3:
+            Relays.thietbi.TB2 = Status;
+            break; 
+        case Device_Relay4:
+            Relays.thietbi.TB3 = Status;
+            break; 
+        case Device_Relay5:
+            Relays.thietbi.TB4 = Status;
+            break; 
+        case Device_Relay6:
+            Relays.thietbi.TB5 = Status;
+            break; 
+        case Device_Relay7:  
+            Relays.thietbi.TB6 = Status;
+            break; 
+        case Device_Relay8: 
+            Relays.thietbi.TB7 = Status;
+            break;     
+    }
+    Relay_Activation;
+    Den_Activation;  
+    Quat_Activation;
+    Bom_Activation;
+    Sensor_Activation;
+}
+
+void ActuatorsDongBoThietBi(char Device, char Status)
+{
+    printf( "{\"type\":%d}\r\n" , getalldataStatusTB);   
+}
+
+void ActuatorsDongBoHenGio(char Device, char Status)
+{
+    printf( "{\"type\":%d}\r\n" , getalldataHengioTB); 
+} 
+
+void AutoON(char Device, char Status)
+{
+    if(Device == Auto_Den)
+    {
+        flagAutoDen = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 4, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 5, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 6, 1 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoDen,ON);    
+    }
+    else if(Device == Auto_Quat)
+    {
+        flagAutoQuat = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 7, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 8, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 9, 1 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoQuat,ON); 
+    }
+    else if(Device == Auto_Bom)
+    {
+        flagAutoBom = 1;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 10, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 11, 1 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 12, 1 ); 
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoBom,ON); 
+    }
+}
+
+void AutoOFF(char Device, char Status)
+{
+    if(Device == Auto_Den)
+    {
+        flagAutoDen = 0; 
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 4, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 5, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 6, 0 ); 
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoDen,OFF);  
+    }
+    else if(Device == Auto_Quat)
+    {
+        flagAutoQuat = 0;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 7, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 8, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 9, 0 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoQuat,OFF); 
+    }
+    else if(Device == Auto_Bom)
+    {
+        flagAutoBom = 0;
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 10, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 11, 0 );
+        printf( "{\"type\":%d,\"id\":%d,\"status\":%d}\r\n" , statusTB, 12, 0 );
+        printf( "{\"type\":%d,\"status\":%d}\r\n" , autoBom,OFF);  
+    }
+}

@@ -1,0 +1,9 @@
+VERSION:3 SOURCE_TIMESTAMP:542B5424
+NODE:I LEVEL:0 LINE:1 "D:\DuAnLon\VuonThongMinh\atmega128\lib\lcd20x4.h"
+NODE:M LEVEL:0 LINE:4 "LCDE_H"
+NODE:M LEVEL:0 LINE:5 "LCDE_L"
+NODE:M LEVEL:0 LINE:7 "LCD_DATA"
+NODE:M LEVEL:0 LINE:8 "LCD_INS"
+NODE:F LEVEL:0 LINE:10 "LcdInit(void)"
+NODE:F LEVEL:0 LINE:22 "PrintFlash(flash unsigned char * str,unsigned char row,unsigned char col)"
+NODE:F LEVEL:0 LINE:41 "Print(unsigned char * str,unsigned char row,unsigned char col)"
